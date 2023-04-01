@@ -1,0 +1,25 @@
+{
+  "name": "blood-ngo-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon app"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^2.0.0-beta.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^5.0.0-beta.1",
+    "pg": "^8.10.0",
+    "twilio": "^4.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
