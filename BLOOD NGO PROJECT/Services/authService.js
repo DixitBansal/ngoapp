@@ -101,6 +101,7 @@ const signUp = async (userData) => {
   };
 
   const forgotPass=async(params)=>{
+    // const exist=await checkPhoneExist(req);
     const phone=params.query.phone;
     const newpass=params.query.pass;
     const hashedPassword = await bcrypt.hash(newpass, 8);
@@ -122,6 +123,24 @@ const signUp = async (userData) => {
         }
         return res;
   }
+
+  const sendOTP=async(req)=>{
+    let res={};
+    const accountSid = "ACb6de2b21cc658da998e90e47dbf4fa8b";
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const verifySid = "VA1141b074b9f4746323daef40fdeeb6c5";
+    const client = require("twilio")(accountSid, authToken);
+    await client.verify.v2
+    .services(verifySid)
+    .verifications.create({ to: `+${req.query.phone}`, channel: req.query.channel })
+    .then((verification) => {
+        console.log(verification);
+       res["verification"]=verification;
+
+    })
+    res={...res,message:"OTP send Successdfully",success:true};
+    return res;
+  }
   
 
-  module.exports={signUp,login,checkPhoneExist,forgotPass};
+  module.exports={signUp,login,checkPhoneExist,forgotPass,sendOTP};
