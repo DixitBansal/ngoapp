@@ -4,38 +4,7 @@ const User = require('../models/user');
 const { config } = require('dotenv');
 
 
-const signUp = async (userData) => {
-    console.log("signup");
-    console.log("data=",userData)
-    const { username, password, phone,email } = userData;
-  
-    const data = {
-      username,
-      password,
-      phone,
-      email
-    };
-  
-    let res = {};
-    const hashedPassword = await bcrypt.hash(password, 8);
-    // console.log(hashedPassword);
-    // password=hashedPassword;
-    const user = new User({username, password:hashedPassword,phone,email});
-    const result = await user.createUser();
-    console.log("result=",result);
-    if (result) {
-        res = {
-            success: true,
-            message: "Added user successfully.",
-        };
-        } else {
-        res = {
-            success: false,
-            message: "Something went wrong.",
-        };
-        }
-        return res;
-  };
+
 
   const checkPhoneExist=async(req)=>{
     const phone=req.query.phone;
@@ -100,29 +69,7 @@ const signUp = async (userData) => {
     return res;
   };
 
-  const forgotPass=async(params)=>{
-    // const exist=await checkPhoneExist(req);
-    const phone=params.query.phone;
-    const newpass=params.query.pass;
-    const hashedPassword = await bcrypt.hash(newpass, 8);
-    let res={};
-    const {rowCount}=await db.query(
-        `UPDATE users SET password = $1 WHERE phone=$2`,[hashedPassword,phone]
-    );
-    console.log(rowCount);
-    if (rowCount>=1) {
-        res = {
-            success: true,
-            message: "password updated successfully",
-        };
-        } else{
-        res = {
-            success: false,
-            message: "Something went wrong.",
-        };
-        }
-        return res;
-  }
+  
 
   const sendOTP=async(req)=>{
     let res={};
@@ -141,6 +88,56 @@ const signUp = async (userData) => {
     res={...res,message:"OTP send Successdfully",success:true};
     return res;
   }
-  
 
-  module.exports={signUp,login,checkPhoneExist,forgotPass,sendOTP};
+  const OTPVerify=async(req)=>{
+    const accountSid = "ACb6de2b21cc658da998e90e47dbf4fa8b";
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const verifySid = "VA1141b074b9f4746323daef40fdeeb6c5";
+    const client = require("twilio")(accountSid, authToken);
+    let response={};
+    await client.verify.v2
+        .services(verifySid)
+        .verificationChecks.create({ to: `+${req.query.phone}`, code: req.query.code })
+        .then((verification_check) => {
+            response.verification_check=verification_check;
+        })
+        response={...response,message:"User verified"};
+        return response;
+
+}
+  
+  const OTPsignup=async(req)=>{
+    const exist=await checkPhoneExist(req);
+    console.log(exist);
+    if(exist){
+        const response={
+            success:false,
+            message:"User already Exists try with different account"
+        }
+     return response;
+    }
+    else{
+
+        const response=await sendOTP(req);
+        return response;
+    }
+  }
+
+  const ForgotPassOTP=async(req)=>{
+    const exist=await checkPhoneExist(req);
+  
+    if(exist){
+        const response=await sendOTP(req);
+        return response;
+    }
+    else{
+        const response={
+            success:false,
+            message:"account not found"
+        }
+        return response;
+    }
+
+  }
+
+  module.exports={login,checkPhoneExist,sendOTP,OTPsignup,OTPVerify,ForgotPassOTP};
