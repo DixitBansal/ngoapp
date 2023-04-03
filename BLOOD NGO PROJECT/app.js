@@ -4,6 +4,7 @@ const cors=require("cors");
 const bodyParser=require("body-parser");
 const { userRoutes } = require("./Routes/userRoutes");
 const { authRoutes } = require("./Routes/authRoutes");
+const { ngoProgramRoutes } = require("./Routes/ngoProgramRoutes");
 require('dotenv').config();
 const port=process.env.PORT
 app.use(bodyParser.json({limit:"5mb"}));
@@ -21,6 +22,7 @@ app.use((err, req, res, next) => {
 });
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/ngoProgram", ngoProgramRoutes);
 app.listen(port,()=>{
     console.log(`server listening at http://localhost:${port}`)
 })
