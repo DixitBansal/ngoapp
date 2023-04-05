@@ -12,7 +12,7 @@ const signUp = async (userData) => {
       username,
       password,
       phone,
-      email
+      email 
     };
   
     let res = {};
@@ -56,4 +56,8 @@ const signUp = async (userData) => {
         }
         return res;
   }
+
+ 
+
+
   module.exports={signUp,UpdatePass};

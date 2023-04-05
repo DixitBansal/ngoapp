@@ -43,4 +43,29 @@ const bloodAvailData=async(params)=>{
 
 
 }
-module.exports={bloodAvailData};
+
+const bloodCampData=async(params)=>{
+    const {state,district,date}=params;
+    const {rows}=await db.query(
+    `select * from donation_camp where camp_state=$1 AND camp_district=$2 AND date=$3`,[state.toLowerCase(),district.toLowerCase(),date]
+    );
+    let response={};
+    const camp_data=rows[0];
+    if(camp_data){
+        response={
+            success:true,
+            data:camp_data,
+            message:"Data found"
+        }
+        return response;
+    }
+    else{
+        response={
+            success:false,
+            message:"Data not found"
+        }
+        return response;
+    }
+
+}
+module.exports={bloodAvailData,bloodCampData};
