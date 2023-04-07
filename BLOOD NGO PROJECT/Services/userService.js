@@ -57,7 +57,30 @@ const signUp = async (userData) => {
         return res;
   }
 
- 
+ const getUserDetails=async(params)=>{
+    const user_id=params;
+    console.log(user_id);
+    const {rows}=await db.query(
+        `SELECT * FROM users WHERE id=$1`,[user_id]
+    );
+    let response={};
+    const user_data=rows[0];
+    if(user_data){
+        response={
+            success:true,
+            data:user_data,
+            message:"Data found"
+        }
+        return response;
+    }
+    else{
+        response={
+            success:false,
+            message:"Data not found"
+        }
+        return response;
+    }
+ }
 
 
-  module.exports={signUp,UpdatePass};
+  module.exports={signUp,UpdatePass,getUserDetails};

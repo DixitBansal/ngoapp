@@ -1,4 +1,17 @@
 const db = require('../DB/connection');
+const dotenv=require('dotenv');
+dotenv.config();
+const AWS=require('aws-sdk');
+const multer=require('multer');
+const multerS3 = require('multer-s3');
+const { response } = require('express');
+const awsConfig={
+    accessKeyId:process.env.AWS_ACCESS_KEY,
+    secretAccessKey:process.env.AWS_SECRET_KEY,
+    bucket_name:process.env.AWS_BUCKET_NAME,
+    region:process.env.AWS_REGION
+}
+const s3=new AWS.S3(awsConfig);
 
 const bloodAvailData=async(params)=>{
     const {state,district,pincode,blood_group,blood_component}=params;
@@ -68,4 +81,65 @@ const bloodCampData=async(params)=>{
     }
 
 }
-module.exports={bloodAvailData,bloodCampData};
+
+const volunteer_req_data=async(req)=>{
+    const user_id=req.query.uid;
+    
+    
+    const uploadToS3=(filedata)=>{
+        return new Promise((resolve,reject)=>{
+            const params={
+                Bucket:process.env.AWS_BUCKET_NAME,
+                Key:`${Date.now().toString()}-${filedata.originalname}`,
+                Body:filedata.buffer
+            }
+              s3.upload(params,(err,data)=>{
+                if(err){
+                    console.log(err);
+                    reject(err);
+                }
+                console.log(data);
+                resolve(data);
+            })
+        })
+       
+    }
+    let response={};
+    let image_array=[];
+
+    if(req.files && req.files.length>0){
+        console.log(req.files);
+        for(let i=0;i<req.files.length;i++){
+
+            await uploadToS3(req.files[i])
+             .then((result)=>{
+                image_array.push(result.Location);
+             })
+             .catch((err)=>{
+                 console.log(err);
+             })
+        }
+        const {rows}=await db.query(
+            'INSERT INTO volunteer_requests(ngo_certificate,aadhar,pan,user_id) VALUES ($1, $2, $3,$4)',[image_array[0],image_array[1],image_array[2],user_id]
+        )
+        if(rows>=0){
+            response={
+                msg:"images uploaded successfully"
+                
+            }
+        }
+        else{
+            response={
+                msg:"something went wrong",
+                success:false
+            }
+        }
+    }
+
+    
+    return response;
+
+}
+   
+
+module.exports={bloodAvailData,bloodCampData,volunteer_req_data};

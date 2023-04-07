@@ -5,6 +5,11 @@ const updatePass=async(req,res)=>{
     const response=await UserService.UpdatePass(req);
     res.status(200).send(response);   
 }
+const getUserData=async(req,res)=>{
+    console.log(req.query.user_id);
+    const response=await UserService.getUserDetails(req.query.user_id);
+    res.status(200).send(response);
+}
 
 const userSignup = async (req, res,next) => {
     try{
@@ -28,4 +33,4 @@ const userSignup = async (req, res,next) => {
     
    
   };
-module.exports={userSignup,updatePass}
+module.exports={userSignup,updatePass,getUserData};
