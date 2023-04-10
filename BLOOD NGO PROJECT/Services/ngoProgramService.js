@@ -34,10 +34,10 @@ const bloodAvailData=async(params)=>{
         AND b.blood_group=$4 AND b.blood_component=$5`,[district.toLowerCase(),state.toLowerCase(),pincode,blood_group,blood_component.toLowerCase()]
     );
     let response={};
-    const blood_bank_data=data1.rows[0];
-    const hospital_data=data2.rows[0];
+    const blood_bank_data=data1.rows;
+    const hospital_data=data2.rows;
    
-    if(hospital_data || blood_bank_data){
+    if(hospital_data.length>0 || blood_bank_data.length>0){
         response={
             success:true,
             blood_bank_data:blood_bank_data,
@@ -63,8 +63,8 @@ const bloodCampData=async(params)=>{
     `select * from donation_camp where camp_state=$1 AND camp_district=$2 AND date=$3`,[state.toLowerCase(),district.toLowerCase(),date]
     );
     let response={};
-    const camp_data=rows[0];
-    if(camp_data){
+    const camp_data=rows;
+    if(camp_data.length>0){
         response={
             success:true,
             data:camp_data,

@@ -17,10 +17,18 @@ const OTPVerify=async(req,res)=>{
 const checkPhone=async(req,res)=>{
     const checkphone=await AuthService.checkPhoneExist(req);
    if(checkphone){
-    res.status(200).send("exits");
+    const response={
+        message:"exists",
+        success:true
+    }
+    res.status(200).send(response);
    }
    else{
-    res.status(200).send("does not exits");
+    const response={
+        message:"not found",
+        success:false
+    }
+    res.status(404).send(response);
    }
 }
 

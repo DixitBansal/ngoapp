@@ -6,7 +6,8 @@ const { config } = require('dotenv');
 const signUp = async (userData) => {
     console.log("signup");
     console.log("data=",userData)
-    const { username, password, phone,email } = userData;
+    const { username, password, phone,email,city,state,blood_group,is_volunteer,address,acc_type } = userData;
+    
   
     const data = {
       username,
@@ -17,13 +18,13 @@ const signUp = async (userData) => {
   
     let res = {};
     const hashedPassword = await bcrypt.hash(password, 8);
-    const user = new User({username, password:hashedPassword,phone,email});
+    const user = new User({username, password:hashedPassword,phone,email,city,state,blood_group,address,acc_type,is_volunteer});
     const result = await user.createUser();
     console.log("result=",result);
     if (result) {
         res = {
             success: true,
-            message: "Added user successfully.",
+            message: "user Added successfully.",
         };
         } else {
         res = {
