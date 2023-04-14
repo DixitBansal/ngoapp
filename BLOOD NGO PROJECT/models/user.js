@@ -26,11 +26,11 @@
   // add a createUser method to the prototype
   User.prototype.createUser = async function() {
       try {
-          const { rows } = await db.query(
+          const { rowCount } = await db.query(
               `INSERT INTO users(username,password,phone,email,city,state,blood_group,address,is_volunteer,acc_type) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
               [this.username,this.password,this.phone,this.email,this.city,this.state,this.blood_group,this.address,this.is_volunteer,this.acc_type]
           );
-          return rows; 
+          return rowCount; 
       } catch (error) {
           throw error;
       }

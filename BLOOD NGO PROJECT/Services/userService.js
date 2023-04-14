@@ -21,7 +21,7 @@ const signUp = async (userData) => {
     const user = new User({username, password:hashedPassword,phone,email,city,state,blood_group,address,acc_type,is_volunteer});
     const result = await user.createUser();
     console.log("result=",result);
-    if (result) {
+    if (result>0) {
         res = {
             success: true,
             message: "user Added successfully.",

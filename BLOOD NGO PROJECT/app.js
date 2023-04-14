@@ -6,6 +6,9 @@ const { userRoutes } = require("./Routes/userRoutes");
 const { authRoutes } = require("./Routes/authRoutes");
 const { ngoProgramRoutes } = require("./Routes/ngoProgramRoutes");
 const { ngoActivityRoutes } = require("./Routes/ngoActivityRoutes");
+const { ngoNotificationRoutes } = require("./Routes/ngoNotificationRoutes");
+const { adminRoutes, adminbloodBankRoutes } = require("./Routes/adminBloodBankRoutes");
+const { employeeRoutes } = require("./Routes/employeeRoutes");
 require('dotenv').config();
 const port=process.env.PORT
 app.use(bodyParser.json({limit:"5mb"}));
@@ -25,6 +28,9 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/ngoProgram", ngoProgramRoutes);
 app.use("/api/v1/ngoActivity",ngoActivityRoutes);
+app.use("/api/v1/ngo",ngoNotificationRoutes);
+app.use("/api/v1/admin/blood_bank",adminbloodBankRoutes);
+app.use("/api/v1/admin/employee",employeeRoutes);
 app.listen(port,()=>{
     console.log(`server listening at http://localhost:${port}`)
 })
