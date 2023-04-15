@@ -1,0 +1,22 @@
+service: Ngo-development #Name of your App
+
+provider:
+  name: aws
+  runtime: nodejs16.x # Node JS version
+  memorySize: 512
+  timeout: 30
+  stage: ${opt:stage, 'development'} # serverless deploy --stage development/production
+  environment:
+    NODE_ENV: ${opt:stage, self:provider.stage, 'development'}
+  region: ap-south-1 # AWS region
+
+functions:
+  api:
+    handler: src/app.handler
+    events:
+      - http: ANY {proxy+}
+      - http: ANY /
+
+package:
+  include:
+    - src/**/*.ejs
