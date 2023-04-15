@@ -10,4 +10,8 @@ const viewEmployees=async(req,res)=>{
     const response=await EMPLOYEE_SERVICES.viewallEmployee(req.query);
     res.status(200).send(response);
 }
-module.exports={addEmployee,viewEmployees};
+const deleteEmployee=async(req,res)=>{
+    const response=await EMPLOYEE_SERVICES.deleteEmployee(req.query);
+    res.status(200).send(response);
+}
+module.exports={addEmployee,viewEmployees,deleteEmployee};

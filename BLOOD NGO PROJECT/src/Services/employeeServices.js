@@ -28,4 +28,23 @@ const viewallEmployee=async(params)=>{
         }
       }
 }
-module.exports={viewallEmployee};
+const deleteEmployee=async(params)=>{
+    const {id}=params;
+    const {rowCount}=await db.query('DELETE FROM users where id=$1',[id]);
+    let response={};
+    if(rowCount>0){
+        response={
+            msg:"Employee deleted successfully",
+            success:"true" 
+        }
+    }
+    else{
+        response={
+            msg:"something went wrong",
+            success:false
+        }
+        
+    }
+    return response;
+}
+module.exports={viewallEmployee,deleteEmployee};
