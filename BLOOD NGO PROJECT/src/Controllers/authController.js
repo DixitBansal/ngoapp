@@ -1,21 +1,27 @@
 const AuthService = require("../Services/authService");
 
 const userLogin = async (req, res) => {
-  const response = await AuthService.login(req);
+  const response = await AuthService.login(req.body);
   res.status(200).send(response);
 };
 
 const signup = async (req, res) => {
-  const response = await AuthService.signup(req);
+  const response = await AuthService.signup(req.body);
+  res.status(200).send(response);
+};
+
+const signupVerification = async (req, res) => {
+  const response = await AuthService.signupVerification(req.body);
   res.status(200).send(response);
 };
 
 const OTPVerify = async (req, res) => {
-  const response = await AuthService.OTPVerify(req.query);
+  const response = await AuthService.OTPVerify(req.body);
   res.status(200).send(response);
 };
+
 const checkPhone = async (req, res) => {
-  const checkphone = await AuthService.checkPhoneExist(req);
+  const checkphone = await AuthService.checkPhoneExist(req.query.phone);
   if (checkphone) {
     const response = {
       message: "exists",
@@ -32,8 +38,15 @@ const checkPhone = async (req, res) => {
 };
 
 const OTPforgotPass = async (req, res) => {
-  const response = await AuthService.ForgotPassOTP(req);
+  const response = await AuthService.ForgotPassOTP(req.body.phone);
   res.status(200).send(response);
 };
 
-module.exports = { OTPforgotPass, checkPhone, OTPVerify, signup, userLogin };
+module.exports = {
+  OTPforgotPass,
+  checkPhone,
+  OTPVerify,
+  signup,
+  userLogin,
+  signupVerification,
+};

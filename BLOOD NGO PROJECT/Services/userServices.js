@@ -1,0 +1,3 @@
+const addUserDetails=async(data)=>{
+    
+}

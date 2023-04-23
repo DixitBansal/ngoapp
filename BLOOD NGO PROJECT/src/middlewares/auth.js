@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
  * @param next Standard next function
  */
 const Auth = async (request, response, next) => {
-  let token = request.headers["auth"];
+  let token = request.get("authorization");
 
   token = token?.split(" ")[1];
   console.log(">>>>>>>>>>>token", token);
@@ -22,8 +22,8 @@ const Auth = async (request, response, next) => {
       console.log(">>>>>>>>>>>verify", verify);
 
       if (verify) {
-        request["id"] = verify._id;
-        request["token"] = token;
+        request["userId"] = verify.id;
+        request["acc_type"] = verify.acc_type;
         next();
       }
     } else {

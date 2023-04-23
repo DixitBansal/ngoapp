@@ -3,22 +3,31 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { config } = require("dotenv");
 const { TWILIO_CHANNEL } = require("../utils/constant");
+const { createToken } = require("../middlewares/generate");
+const { getUserDetails } = require("./userService");
 
-const checkPhoneExist = async (req) => {
-  const phone = req.query.phone;
+const checkPhoneExist = async (phone) => {
+  let response = {};
+
   const { rows } = await db.query(`SELECT * FROM USERS WHERE phone=$1`, [
     phone,
   ]);
   console.log(rows[0]);
   if (rows[0] != undefined) {
-    return true;
+    response = {
+      success: true,
+      data: rows[0],
+    };
   } else {
-    return false;
+    response = {
+      success: false,
+    };
   }
+  return response;
 };
 
-const login = async (req) => {
-  const { phone, password } = req.query;
+const login = async (data) => {
+  const { phone, password } = data;
   // const phone=req.query.phone;
   // const password=req.query.password;
 
@@ -34,17 +43,17 @@ const login = async (req) => {
     // match password
     const isPasswordMatch = await bcrypt.compare(
       password.trim(),
-      usersData.password
+      usersData.password ? usersData.password : ""
     );
     console.log(">>>>>>>>>>>>>>>>>>>>>>>>>isPasswordMatch", isPasswordMatch);
 
     if (isPasswordMatch) {
-      // const token = await createToken(usersData);
+      const token = await createToken(usersData);
 
       res = {
         success: true,
         message: "User Log in successfully.",
-        data: { ...usersData },
+        data: { ...usersData, token },
       };
     } else {
       res = {
@@ -62,7 +71,7 @@ const login = async (req) => {
   return res;
 };
 
-const sendOTP = async (req) => {
+const sendOTP = async (phone) => {
   let res = {};
   const accountSid = "ACb6de2b21cc658da998e90e47dbf4fa8b";
   const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -71,14 +80,14 @@ const sendOTP = async (req) => {
   await client.verify.v2
     .services(verifySid)
     .verifications.create({
-      to: +req.query.phone,
+      to: "+91" + phone,
       channel: TWILIO_CHANNEL,
     })
     .then((verification) => {
       console.log(verification);
       res["verification"] = verification;
     });
-  res = { ...res, message: "OTP send Successdfully", success: true };
+  res = { ...res, message: "OTP sent Successdfully", success: true };
   return res;
 };
 
@@ -89,44 +98,94 @@ const OTPVerify = async (data) => {
   const verifySid = "VA1141b074b9f4746323daef40fdeeb6c5";
   const client = require("twilio")(accountSid, authToken);
   let response = {};
+  let verification_status = false;
   await client.verify.v2
     .services(verifySid)
-    .verificationChecks.create({ to: +phone, code: code })
+    .verificationChecks.create({ to: "+91" + phone, code: code })
     .then((verification_check) => {
-      response.verification_check = verification_check;
+      verification_status = verification_check.valid;
     });
-  response = { ...response, message: "User verified" };
+  console.log(verification_status);
+  if (verification_status) {
+    response = { verification_status, message: "User verified" };
+  } else {
+    response = {
+      msg: "incorrect otp try again",
+      verification_status,
+    };
+  }
   return response;
 };
 
-const signup = async (req) => {
-  const exist = await checkPhoneExist(req);
+const signup = async (data) => {
+  console.log("data=", data);
+  const { phone } = data;
+  const exist = await checkPhoneExist(phone);
   console.log(exist);
-  if (exist) {
+  if (exist.success && exist.data.password !== null) {
     const response = {
       success: false,
       message: "User already Exists try with different account",
     };
     return response;
   } else {
-    const response = await sendOTP(req);
+    const response = await sendOTP(phone);
     return response;
   }
 };
 
-const ForgotPassOTP = async (req) => {
-  const exist = await checkPhoneExist(req);
+const signupVerification = async (data) => {
+  const { phone } = data;
+  let response = {};
+  const result = await OTPVerify(data);
+  if (result.verification_status) {
+    // grt uder by phone no
+    const user = await getUserDetails(undefined, phone);
+    // iof useer does not exist then creat otherwise skip create
+    let isUserCreated = false;
+    if (!user.success) {
+      const { rowCount, rows } = await db.query(
+        `INSERT INTO users(username,password,phone,email,city,state,blood_group,address,is_volunteer,acc_type,is_active,created_at,updated_at) VALUES (DEFAULT,DEFAULT,${phone},DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'user',true,now(),DEFAULT)`
+      );
+      isUserCreated = !!rowCount;
+    } else {
+      isUserCreated = true;
+    }
 
-  if (exist) {
-    const response = await sendOTP(req);
+    if (isUserCreated) {
+      const userData = await getUserDetails(undefined, phone);
+      if (userData.success) {
+        const token = await createToken(userData.data);
+        response = {
+          data: { token, ...userData.data },
+          msg: "ACccount created Successfully",
+          success: true,
+        };
+      }
+    } else {
+      response = {
+        msg: "error while creating account try again later!",
+        success: false,
+      };
+    }
     return response;
   } else {
-    const response = {
+    return result;
+  }
+};
+
+const ForgotPassOTP = async (phone) => {
+  const exist = await checkPhoneExist(phone);
+  let response = {};
+  if (exist) {
+    response = await sendOTP(phone);
+  } else {
+    response = {
       success: false,
       message: "account not found",
     };
-    return response;
   }
+  return response;
 };
 
 module.exports = {
@@ -136,4 +195,5 @@ module.exports = {
   signup,
   OTPVerify,
   ForgotPassOTP,
+  signupVerification,
 };

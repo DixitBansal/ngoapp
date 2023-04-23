@@ -1,0 +1,57 @@
+{
+    "andhra pradesh": [
+      {
+        "label": "Anantapur",
+        "value": "anantapur"
+      },
+      {
+        "label": "Chittoor",
+        "value": "chittoor"
+      },
+      {
+        "label": "East Godavari",
+        "value": "east godavari"
+      },
+      {
+        "label": "Guntur",
+        "value": "guntur"
+      },
+      {
+        "label": "Krishna",
+        "value": "krishna"
+      },
+      {
+        "label": "Kurnool",
+        "value": "kurnool"
+      },
+      {
+        "label": "Prakasam",
+        "value": "prakasam"
+      },
+      {
+        "label": "SPSR Nellore",
+        "value": "spsr nellore"
+      },
+      {
+        "label": "Srikakulam",
+        "value": "srikakulam"
+      },
+      {
+        "label": "Visakhapatnam",
+        "value": "visakhapatnam"
+      },
+      {
+        "label": "Vizianagaram",
+        "value": "vizianagaram"
+      },
+      {
+        "label": "West Godavari",
+        "value": "west godavari"
+      },
+      {
+        "label": "YSR Kadapa",
+        "value": "ysr kadapa"
+      }
+    ]
+}
+  
