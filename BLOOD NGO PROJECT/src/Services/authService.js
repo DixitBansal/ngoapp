@@ -2,7 +2,7 @@ const db = require("../DB/connection");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { config } = require("dotenv");
-const { TWILIO_CHANNEL } = require("../utils/constant");
+const { TWILIO_CHANNEL, ACCOUNT_TYPES } = require("../utils/constant");
 const { createToken } = require("../middlewares/generate");
 const { getUserDetails } = require("./userService");
 
@@ -27,13 +27,32 @@ const checkPhoneExist = async (phone) => {
 };
 
 const login = async (data) => {
-  const { phone, password } = data;
+  const { phone, password, acc_type } = data;
   // const phone=req.query.phone;
   // const password=req.query.password;
 
-  const { rows } = await db.query(`SELECT * FROM USERS WHERE phone=$1`, [
-    phone,
-  ]);
+  if (!phone || !password || !acc_type) {
+    return {
+      success: false,
+      message: "Please provide all details.",
+    };
+  }
+  if (phone.toString().length != 10) {
+    return {
+      success: false,
+      message: "Please provide valid phone number.",
+    };
+  }
+  if (Object.values(ACCOUNT_TYPES).includes(acc_type)) {
+    return {
+      success: false,
+      message: "Please provide valid account type.",
+    };
+  }
+  const { rows } = await db.query(
+    `SELECT * FROM USERS WHERE phone=$1 AND acc_type=$2`,
+    [phone, acc_type]
+  );
   // console.log("rows=",rows[0].id);
   const usersData = rows[0];
   console.log("usersdata=", usersData);
