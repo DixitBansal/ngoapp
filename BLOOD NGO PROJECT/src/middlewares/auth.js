@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { ACCOUNT_TYPES } = require("../utils/constant");
 
 /**
  * @description - This function is used to authenticate a http request by JWT token.
@@ -39,6 +40,26 @@ const Auth = async (request, response, next) => {
       message: "session_expired",
       success: false,
       error: "token-expired",
+    });
+  }
+};
+
+const isAdmin = async (request, response, next) => {
+  try {
+    if (request.acc_type === ACCOUNT_TYPES.ADMIN) {
+      next();
+    } else {
+      response.status(401).send({
+        message: "Unauthorized",
+        success: false,
+        error: "unauthorized_user",
+      });
+    }
+  } catch (error) {
+    console.error("role-----", error);
+    response.status(401).send({
+      message: "something_went_wrong",
+      success: false,
     });
   }
 };

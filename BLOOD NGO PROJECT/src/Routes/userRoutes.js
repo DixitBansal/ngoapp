@@ -18,4 +18,10 @@ userRoutes.get(
   HandleErrors(userController.getUserData)
 );
 
+userRoutes.post(
+  "/pre-signed-url",
+  Auth,
+  HandleErrors(userController.getPresignedURL)
+);
+
 module.exports = { userRoutes };

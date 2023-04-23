@@ -147,4 +147,39 @@ const getUserDetails = async (id, phone) => {
   return response;
 };
 
-module.exports = { signUp, UpdatePass, getUserDetails, updateProfile };
+/***
+ * @methdo to get presigned URL
+ */
+const getPresignedURL = async (data) => {
+  const { fileFormat, userId, type } = data;
+  if (!fileFormat || !userId || !type) {
+    return {
+      success: false,
+      message: "invalid arguments",
+    };
+  }
+  const filePath = `/${type}/${userId}${new Date().getTime()}.${fileFormat}`;
+  const preSignedURL = await gettingPreSignedUrl(filePath, fileFormat);
+
+  if (preSignedURL) {
+    return (this.response = {
+      success: true,
+      message: "image_uploaded_successfully",
+      data: preSignedURL,
+    });
+  } else {
+    return (this.response = {
+      success: false,
+      message: "image_not_uploaded",
+      data: preSignedURL,
+    });
+  }
+};
+
+module.exports = {
+  signUp,
+  UpdatePass,
+  getUserDetails,
+  updateProfile,
+  getPresignedURL,
+};

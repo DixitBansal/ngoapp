@@ -25,4 +25,13 @@ const updateProfile = async (req, res, next) => {
   console.log("response=", response);
   res.send(response);
 };
-module.exports = { updateProfile, updatePass, getUserData };
+
+export const getPresignedURL = async (req, res) => {
+  const response = await UserService.getPresignedURL({
+    ...req.body,
+    userId: req.userId,
+  });
+  res.status(200).send(response);
+};
+
+module.exports = { updateProfile, updatePass, getUserData, getPresignedURL };

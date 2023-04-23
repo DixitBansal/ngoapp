@@ -1,3 +1,9 @@
 const TWILIO_CHANNEL = "sms";
 
-module.exports = { TWILIO_CHANNEL };
+const ACCOUNT_TYPES = {
+  ADMIN: "admin",
+  USER: "user",
+  EMPLOYEE: "employee",
+};
+
+module.exports = { TWILIO_CHANNEL, ACCOUNT_TYPES };
