@@ -32,7 +32,6 @@ const login = async (data) => {
   // const password=req.query.password;
   console.log(phone, password);
   console.log(acc_type);
-
   const { rows } = await db.query(
     `SELECT * FROM USERS WHERE phone=$1 AND acc_type=$2`,
     [phone, acc_type]
