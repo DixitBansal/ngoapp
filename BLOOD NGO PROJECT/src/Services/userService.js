@@ -2,6 +2,7 @@ const db = require("../DB/connection");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { config } = require("dotenv");
+const { gettingPreSignedUrl } = require("../utils/helper");
 
 const signUp = async (userData) => {
   console.log("signup");

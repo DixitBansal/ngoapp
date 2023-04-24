@@ -15,17 +15,20 @@ const awsConfig = {
 const s3 = new AWS.S3(awsConfig);
 
 const bloodAvailData = async (data) => {
+  const limit = parseInt(data.limit) || 20; // default limit is 10
+  const offset = parseInt(data.offset) || 0; // default offset is 0
+  console.log("limit=", limit);
   const { state, district, pincode = undefined, blood_group } = data;
   let result = {};
   if (pincode) {
     result = await db.query(
-      `SELECT * FROM blood_source WHERE $1 ILIKE ANY (avail_bloods) AND state ILIKE $2 AND district ILIKE $3 AND pincode=$4`,
-      [blood_group, state, district, pincode]
+      `SELECT * FROM blood_source WHERE $1 ILIKE ANY (avail_bloods) AND state ILIKE $2 AND district ILIKE $3 AND pincode=$4 LIMIT $5 OFFSET $6`,
+      [blood_group, state, district, pincode, limit, offset]
     );
   } else {
     result = await db.query(
-      `SELECT * FROM blood_source WHERE $1 ILIKE ANY (avail_bloods) AND state ILIKE $2 AND district ILIKE $3`,
-      [blood_group, state, district]
+      `SELECT * FROM blood_source WHERE $1 ILIKE ANY (avail_bloods) AND state ILIKE $2 AND district ILIKE $3 LIMIT $4 OFFSET $5`,
+      [blood_group, state, district, limit, offset]
     );
   }
   const { rows } = result;
@@ -46,13 +49,16 @@ const bloodAvailData = async (data) => {
 };
 
 const bloodCampData = async (data) => {
+  const limit = parseInt(data.limit) || 20; // default limit is 10
+  const offset = parseInt(data.offset) || 0; // default offset is 0
+  console.log("limit=", limit);
   const { state, district, start_date, end_date } = data;
   const from_date = moment(start_date).format("YYYY-MM-DD").toString();
   const to_date = moment(end_date).format("YYYY-MM-DD").toString();
   console.log("s ", from_date);
   const { rows } = await db.query(
-    `select * from donation_camp where camp_state ILIKE $1 AND camp_district ILIKE $2 AND date >= $3 AND date <= $4`,
-    [state, district, from_date, to_date]
+    `select * from donation_camp where camp_state ILIKE $1 AND camp_district ILIKE $2 AND date >= $3 AND date <= $4 LIMIT $5 OFFSET $6`,
+    [state, district, from_date, to_date, limit, offset]
   );
   let response = {};
   if (rows.length > 0) {

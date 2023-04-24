@@ -26,7 +26,7 @@ const updateProfile = async (req, res, next) => {
   res.send(response);
 };
 
-export const getPresignedURL = async (req, res) => {
+const getPresignedURL = async (req, res) => {
   const response = await UserService.getPresignedURL({
     ...req.body,
     userId: req.userId,

@@ -27,13 +27,16 @@ const checkPhoneExist = async (phone) => {
 };
 
 const login = async (data) => {
-  const { phone, password } = data;
+  const { phone, password, acc_type } = data;
   // const phone=req.query.phone;
   // const password=req.query.password;
+  console.log(phone, password);
+  console.log(acc_type);
 
-  const { rows } = await db.query(`SELECT * FROM USERS WHERE phone=$1`, [
-    phone,
-  ]);
+  const { rows } = await db.query(
+    `SELECT * FROM USERS WHERE phone=$1 AND acc_type=$2`,
+    [phone, acc_type]
+  );
   // console.log("rows=",rows[0].id);
   const usersData = rows[0];
   console.log("usersdata=", usersData);
@@ -187,6 +190,50 @@ const ForgotPassOTP = async (phone) => {
   }
   return response;
 };
+const resendOTP = async (data) => {
+  const { phone } = data;
+  let response = {};
+  const result = await sendOTP(phone);
+  if (result.success) {
+    response = {
+      msg: "OTP sent successfully",
+      data: result,
+    };
+  } else {
+    response = {
+      msg: "OTP cant sent due to some problem,try again!",
+      success: false,
+    };
+  }
+  return response;
+};
+
+const resetPassword = async (data) => {
+  const { phone, code, password } = data;
+  const hashedPassword = await bcrypt.hash(password, 8);
+  const result = await OTPVerify(data);
+  let response = {};
+  if (result.verification_status) {
+    const { rowCount } = await db.query(
+      `UPDATE users SET password=$1,updated_at=now() where phone=$2`,
+      [hashedPassword, phone]
+    );
+    if (rowCount > 0) {
+      response = {
+        message: "password reset successfully",
+        success: true,
+      };
+    } else {
+      response = {
+        message: "some problem occured while resetting password!",
+        success: false,
+      };
+    }
+    return response;
+  } else {
+    return result;
+  }
+};
 
 module.exports = {
   login,
@@ -196,4 +243,6 @@ module.exports = {
   OTPVerify,
   ForgotPassOTP,
   signupVerification,
+  resendOTP,
+  resetPassword,
 };

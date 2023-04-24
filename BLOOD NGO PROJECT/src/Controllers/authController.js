@@ -42,6 +42,16 @@ const OTPforgotPass = async (req, res) => {
   res.status(200).send(response);
 };
 
+const resetPassword = async (req, res) => {
+  const response = await AuthService.resetPassword(req.body);
+  res.status(200).send(response);
+};
+
+const resendOTP = async (req, res) => {
+  const response = await AuthService.resendOTP(req.body);
+  res.status(200).send(response);
+};
+
 module.exports = {
   OTPforgotPass,
   checkPhone,
@@ -49,4 +59,6 @@ module.exports = {
   signup,
   userLogin,
   signupVerification,
+  resendOTP,
+  resetPassword,
 };

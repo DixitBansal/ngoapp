@@ -4,7 +4,7 @@ const { HandleErrors } = require("../middlewares/handleError");
 const Auth = require("../middlewares/auth");
 const ngoActivityRoutes = express.Router();
 ngoActivityRoutes.get(
-  "/getposts",
+  "/all-posts",
   Auth,
   HandleErrors(NGO_ACTIVITY_CONTROLLER.ngoPosts)
 );

@@ -13,15 +13,17 @@ const {
 const { employeeRoutes } = require("./Routes/employeeRoutes");
 const { bloodCampRoutes } = require("./Routes/bloodCampRoutes");
 const { ngoPostsRoutes } = require("./Routes/ngoPostsRoutes");
+const { statesRoutes } = require("./Routes/statesRoutes");
 
 Routes.use("/user", userRoutes);
 Routes.use("/auth", authRoutes);
 Routes.use("/ngoProgram", ngoProgramRoutes);
 Routes.use("/ngoActivity", ngoActivityRoutes);
 Routes.use("/ngo", ngoNotificationRoutes);
-Routes.use("/admin/blood-bank", adminbloodBankRoutes);
+Routes.use("/admin/blood-source", adminbloodBankRoutes);
 Routes.use("/admin/employee", employeeRoutes);
 Routes.use("/admin/blood_donation_camps", bloodCampRoutes);
 Routes.use("/admin/ngoposts", ngoPostsRoutes);
+Routes.use("/admin", statesRoutes);
 
 module.exports = { Routes };

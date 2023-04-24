@@ -1,12 +1,12 @@
 const db = require("../DB/connection");
 
-const viewallBoodBank = async (params) => {
-  let { limit = 10, offset = 0 } = params;
+const viewallBoodBank = async (data) => {
+  let { limit = 10, offset = 0 } = data;
   limit = +limit;
   offset = +offset;
 
   const { rows } = await db.query(
-    "SELECT * FROM blood_bank ORDER BY blood_bank_id DESC LIMIT $1 OFFSET $2",
+    "SELECT * FROM blood_source ORDER BY created_at DESC LIMIT $1 OFFSET $2",
     [limit, offset]
   );
 
@@ -27,40 +27,47 @@ const viewallBoodBank = async (params) => {
   return response;
 };
 
-const addBloodBank = async (params) => {
+const addBloodBank = async (data) => {
   const {
-    blood_bank_name,
-    b_category,
-    b_contact,
-    b_email,
-    b_license_no,
+    src_type,
+    src_name,
+    category,
+    src_contact,
+    src_email,
+    src_license,
     district,
     state,
     pincode,
-  } = params;
+    avail_bloods,
+    address,
+    is_active,
+  } = data;
 
   const { rowCount } = await db.query(
-    "INSERT INTO blood_bank (blood_bank_name,b_category,b_contact,b_email,b_license_no,district,state,pincode) VALUES ($1, $2, $3,$4,$5,$6,$7,$8)",
+    "INSERT INTO blood_source (src_type,src_name,category,src_contact,src_email,src_license,district,state,pincode,avail_bloods,created_at,updated_at,address,is_active) VALUES ($1, $2, $3,$4,$5,$6,$7,$8,$9,$10,now(),DEFAULT,$11,$12)",
     [
-      blood_bank_name.toLowerCase(),
-      b_category.toLowerCase(),
-      b_contact,
-      b_email,
-      b_license_no,
-      district.toLowerCase(),
-      state.toLowerCase(),
+      src_type,
+      src_name,
+      category,
+      src_contact,
+      src_email,
+      src_license,
+      district,
+      state,
       pincode,
+      avail_bloods,
+      address,
+      is_active,
     ]
   );
 
-  const rows = rowCount;
   // console.log(rows);
   let response = {
     msg: "data not added",
     success: false,
   };
 
-  if (rows > 0) {
+  if (rowCount > 0) {
     response = {
       msg: "blood-bank added successfully",
       success: "true",
@@ -69,30 +76,38 @@ const addBloodBank = async (params) => {
   return response;
 };
 
-const editBBDEtails = async (params) => {
+const editBBDEtails = async (data) => {
   const {
-    blood_bank_id,
-    blood_bank_name,
-    b_category,
-    b_contact,
-    b_email,
-    b_license_no,
+    src_id,
+    src_type,
+    src_name,
+    category,
+    src_contact,
+    src_email,
+    src_license,
     district,
     state,
     pincode,
-  } = params;
+    avail_bloods,
+    address,
+    is_active,
+  } = data;
   const { rowCount } = await db.query(
-    "UPDATE blood_bank SET blood_bank_name=$1,b_category=$2,b_contact=$3,b_email=$4,b_license_no=$5,district=$6,state=$7,pincode=$8 WHERE blood_bank_id=$9",
+    "UPDATE blood_source SET src_name=$1,category=$2,src_contact=$3,src_email=$4,src_license=$5,district=$6,state=$7,pincode=$8,avail_bloods=$9,address=$10,is_active=$11, src_type=$12,updated_at=now() WHERE src_id=$13",
     [
-      blood_bank_name,
-      b_category,
-      b_contact,
-      b_email,
-      b_license_no,
+      src_name,
+      category,
+      src_contact,
+      src_email,
+      src_license,
       district,
       state,
       pincode,
-      blood_bank_id,
+      avail_bloods,
+      address,
+      is_active,
+      src_type,
+      src_id,
     ]
   );
   let response = {};
