@@ -19,4 +19,13 @@ const employeePosts = async (req, res) => {
   res.status(200).send(response);
 };
 
-module.exports = { createPost, employeePosts };
+const editPost = async (req, res) => {
+  const data = {
+    ...req.body,
+    userId: req.userId,
+  };
+  const response = await NGO_POSTS_SERVICE.editPost(data);
+  res.status(200).send(response);
+};
+
+module.exports = { createPost, employeePosts, editPost };

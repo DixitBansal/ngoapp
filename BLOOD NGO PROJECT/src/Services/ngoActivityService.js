@@ -1,5 +1,6 @@
 const db = require("../DB/connection");
 const { ACCOUNT_TYPES } = require("../utils/constant");
+
 const ngoPosts = async (data) => {
   console.log("limit=", data.limit);
   console.log("offset=", data.offset);

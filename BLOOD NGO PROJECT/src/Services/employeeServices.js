@@ -2,6 +2,7 @@ const db = require("../DB/connection");
 const bcrypt = require("bcryptjs");
 const { ACCOUNT_TYPES } = require("../utils/constant");
 const { getUserDetails } = require("./userService");
+
 const viewallEmployee = async (params) => {
   const limit = parseInt(params.limit) || 10; // default limit is 10
   const offset = parseInt(params.offset) || 0; // default offset is 0
@@ -32,6 +33,7 @@ const viewallEmployee = async (params) => {
     });
   }
 };
+
 const getEmployeeDetails = async (id) => {
   try {
     const { rows } = await db.query(
@@ -60,6 +62,7 @@ const getEmployeeDetails = async (id) => {
     });
   }
 };
+
 const addEmployee = async (userData) => {
   const {
     username,

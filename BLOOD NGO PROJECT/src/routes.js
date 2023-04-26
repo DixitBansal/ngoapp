@@ -14,6 +14,7 @@ const { employeeRoutes } = require("./Routes/employeeRoutes");
 const { bloodCampRoutes } = require("./Routes/bloodCampRoutes");
 const { ngoPostsRoutes } = require("./Routes/ngoPostsRoutes");
 const { statesRoutes } = require("./Routes/statesRoutes");
+const { postVerificationRoutes } = require("./Routes/postVerificationRoutes");
 
 Routes.use("/user", userRoutes);
 Routes.use("/auth", authRoutes);
@@ -25,5 +26,6 @@ Routes.use("/admin/employee", employeeRoutes);
 Routes.use("/admin/blood_donation_camps", bloodCampRoutes);
 Routes.use("/admin", statesRoutes);
 Routes.use("/employee/ngo-activity-post", ngoPostsRoutes);
+Routes.use("/admin/ngo-post", postVerificationRoutes);
 
 module.exports = { Routes };

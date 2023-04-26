@@ -1,28 +1,47 @@
 const db = require("../DB/connection");
-const { getPresignedURL } = require("./userService");
+const { response } = require("./userService");
+
 const createPost = async (data) => {
-  const { userId, content } = data;
+  const { userId, content, image_url } = data;
   let response = {};
-  const result = await getPresignedURL(data);
-  if (result.success) {
-    const { rowCount } = await db.query(
-      "INSERT INTO ngo_activity_posts(content,image_url,created_at,updated_at,created_by,is_verified) values($1,$2,now(),now(),$3,DEFAULT)",
-      [content, result.data, userId]
-    );
-    if (rowCount > 0) {
-      response = {
-        msg: "Post Uploaded Successfully",
-        success: true,
-      };
-    } else {
-      response = {
-        msg: "some error occured while uploading!",
-        success: false,
-      };
-    }
-    return response;
+
+  const { rowCount } = await db.query(
+    "INSERT INTO ngo_activity_posts(content,image_url,created_at,updated_at,created_by,is_verified) values($1,$2,now(),now(),$3,DEFAULT)",
+    [content, image_url, userId]
+  );
+  if (rowCount > 0) {
+    response = {
+      msg: "Post Uploaded Successfully",
+      success: true,
+    };
+  } else {
+    response = {
+      msg: "some error occured while uploading!",
+      success: false,
+    };
   }
-  return result;
+  return response;
+};
+
+const editPost = async (data) => {
+  const { postId, userId, content, image_url } = data;
+  let response = {};
+  const { rowCount } = await db.query(
+    "UPDATE ngo_activity_posts SET content=$1,image_url=$2, updated_at=now() where post_id=$3 AND created_by=$4",
+    [content, image_url, postId, userId]
+  );
+  if (rowCount > 0) {
+    response = {
+      msg: "post edited successfully",
+      success: true,
+    };
+  } else {
+    response = {
+      msg: "some error occured while editing!",
+      success: false,
+    };
+  }
+  return response;
 };
 
 const employeePosts = async (data) => {
@@ -60,4 +79,4 @@ const employeePosts = async (data) => {
   }
 };
 
-module.exports = { createPost, employeePosts };
+module.exports = { createPost, employeePosts, editPost };

@@ -16,4 +16,5 @@ ngoPostsRoutes.get(
   HandleErrors(NGO_POSTS_CONTROLLER.employeePosts)
 );
 
+ngoPostsRoutes.put("/edit", Auth, HandleErrors(NGO_POSTS_CONTROLLER.editPost));
 module.exports = { ngoPostsRoutes };
