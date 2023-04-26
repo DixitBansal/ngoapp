@@ -23,7 +23,6 @@ Routes.use("/ngo", ngoNotificationRoutes);
 Routes.use("/admin/blood-source", adminbloodBankRoutes);
 Routes.use("/admin/employee", employeeRoutes);
 Routes.use("/admin/blood_donation_camps", bloodCampRoutes);
-Routes.use("/admin/ngoposts", ngoPostsRoutes);
 Routes.use("/admin", statesRoutes);
 
 module.exports = { Routes };

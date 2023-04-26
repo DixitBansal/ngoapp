@@ -34,7 +34,7 @@ const login = async (data) => {
   console.log(acc_type);
   const { rows } = await db.query(
     `SELECT * FROM USERS WHERE phone=$1 AND acc_type=$2`,
-    [phone, acc_type]
+    [phone.trim(), acc_type.trim()]
   );
   // console.log("rows=",rows[0].id);
   const usersData = rows[0];

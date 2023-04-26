@@ -9,7 +9,7 @@ const updatePass = async (req, res) => {
 const getUserData = async (req, res) => {
   // console.log(req.userId);
   let user_id = "";
-  req.acc_type == "user"
+  req.acc_type == "user" || req.acc_type == "employee"
     ? (user_id = req.userId)
     : (user_id = req.query.user_id);
   const response = await UserService.getUserDetails(user_id, undefined);

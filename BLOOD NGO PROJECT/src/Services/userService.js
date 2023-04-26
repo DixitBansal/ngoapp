@@ -3,52 +3,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { config } = require("dotenv");
 const { gettingPreSignedUrl } = require("../utils/helper");
-
-const signUp = async (userData) => {
-  console.log("signup");
-  console.log("data=", userData);
-  const {
-    username,
-    password,
-    phone,
-    email,
-    city,
-    state,
-    blood_group,
-    is_volunteer,
-    address,
-    acc_type,
-  } = userData;
-
-  let res = {};
-  const hashedPassword = await bcrypt.hash(password, 8);
-  const user = new User({
-    username,
-    password: hashedPassword,
-    phone,
-    email,
-    city,
-    state,
-    blood_group,
-    address,
-    acc_type,
-    is_volunteer,
-  });
-  const result = await user.createUser();
-  console.log("result=", result);
-  if (result > 0) {
-    res = {
-      success: true,
-      message: "user Added successfully.",
-    };
-  } else {
-    res = {
-      success: false,
-      message: "Something went wrong.",
-    };
-  }
-  return res;
-};
+const { ACCOUNT_TYPES } = require("../utils/constant");
 
 const updateProfile = async (userData) => {
   const {
@@ -83,7 +38,7 @@ const updateProfile = async (userData) => {
     ]
   );
   if (rowCount > 0) {
-    const updatedData = await getUserDetails(id, undefined);
+    const updatedData = await getUserDetails(userId, undefined);
     if (updatedData.success) {
       response = {
         success: true,
@@ -178,7 +133,6 @@ const getPresignedURL = async (data) => {
 };
 
 module.exports = {
-  signUp,
   UpdatePass,
   getUserDetails,
   updateProfile,
