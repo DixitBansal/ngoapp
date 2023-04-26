@@ -25,16 +25,10 @@ const editEmployee = async (req, res) => {
   res.status(200).send(response);
 };
 
-const employeePosts = async (req, res) => {
-  const response = await EMPLOYEE_SERVICES.employeePosts(req.query);
-  res.status(200).send(response);
-};
-
 module.exports = {
   addEmployee,
   viewEmployees,
   deleteEmployee,
   employeeDetails,
   editEmployee,
-  employeePosts,
 };

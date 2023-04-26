@@ -174,45 +174,10 @@ const editEmployee = async (data) => {
   return response;
 };
 
-const employeePosts = async (data) => {
-  console.log("limit=", data.limit);
-  console.log("offset=", data.offset);
-  const limit = parseInt(data.limit) || 10; // default limit is 10
-  const offset = parseInt(data.offset) || 0; // default offset is 0
-  const { eid } = data;
-  let response = {};
-  try {
-    const { rows } = await db.query(
-      "SELECT * FROM ngo_activity_posts Where created_by=$3 ORDER BY updated_at DESC LIMIT $1 OFFSET $2",
-      [limit, offset, eid]
-    );
-
-    if (rows.length > 0) {
-      response = {
-        success: true,
-        data: rows,
-        message: "Data found",
-      };
-      return response;
-    } else {
-      response = {
-        success: false,
-        message: "Data not found",
-      };
-      return response;
-    }
-  } catch (err) {
-    return (response = {
-      message: err.message,
-    });
-  }
-};
-
 module.exports = {
   viewallEmployee,
   deleteEmployee,
   addEmployee,
   getEmployeeDetails,
   editEmployee,
-  employeePosts,
 };

@@ -29,6 +29,7 @@ adminbloodBankRoutes.delete(
 );
 adminbloodBankRoutes.put(
   "/update-blood-details/:bbid",
+  Auth,
   HandleErrors(ADMIN_BLOOD_BANK_CONTROLLER.update_BloodDetails)
 );
 

@@ -108,6 +108,7 @@ const getUserDetails = async (id, phone) => {
  */
 const getPresignedURL = async (data) => {
   const { fileFormat, userId, type } = data;
+  console.log(data);
   if (!fileFormat || !userId || !type) {
     return {
       success: false,
