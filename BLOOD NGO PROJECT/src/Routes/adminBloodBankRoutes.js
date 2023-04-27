@@ -27,10 +27,5 @@ adminbloodBankRoutes.delete(
   "/",
   HandleErrors(ADMIN_BLOOD_BANK_CONTROLLER.deleteDetails)
 );
-adminbloodBankRoutes.put(
-  "/update-blood-details/:bbid",
-  Auth,
-  HandleErrors(ADMIN_BLOOD_BANK_CONTROLLER.update_BloodDetails)
-);
 
 module.exports = { adminbloodBankRoutes };

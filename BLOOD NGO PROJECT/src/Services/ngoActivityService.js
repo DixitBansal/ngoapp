@@ -21,6 +21,7 @@ const ngoPosts = async (data) => {
             FROM ngo_activity_posts p
             INNER JOIN users u
             ON u.id = p.created_by
+            ORDER BY is_verified DESC
             LIMIT $1 OFFSET $2`,
         [limit, offset]
       );
@@ -53,4 +54,26 @@ const ngoPosts = async (data) => {
     });
   }
 };
-module.exports = { ngoPosts };
+
+const postDetails = async (postId) => {
+  let response = {};
+  const { rows } = await db.query(
+    "select * from ngo_activity_posts where post_id=$1",
+    [postId]
+  );
+  if (rows.length > 0) {
+    response = {
+      msg: "Data Found",
+      data: rows,
+      success: true,
+    };
+  } else {
+    response = {
+      msg: "some error occured in finding data!",
+      success: false,
+    };
+  }
+  return response;
+};
+
+module.exports = { ngoPosts, postDetails };

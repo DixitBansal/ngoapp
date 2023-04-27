@@ -5,4 +5,9 @@ const ngoPosts = async (req, res) => {
   const response = await NGO_ACTIVITY_SERVICE.ngoPosts(data);
   res.status(200).send(response);
 };
-module.exports = { ngoPosts };
+
+const postDetails = async (req, res) => {
+  const response = await NGO_ACTIVITY_SERVICE.postDetails(req.params.postId);
+  res.status(200).send(response);
+};
+module.exports = { ngoPosts, postDetails };

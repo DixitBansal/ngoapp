@@ -28,7 +28,7 @@ employeeRoutes.get(
   HandleErrors(EMPLOYEE_CONTROLLER.employeeDetails)
 );
 
-employeeRoutes.post(
+employeeRoutes.put(
   "/edit",
   Auth,
   HandleErrors(EMPLOYEE_CONTROLLER.editEmployee)
