@@ -37,7 +37,7 @@ const ngoPosts = async (data) => {
     if (posts.length > 0) {
       response = {
         success: true,
-        data: posts,
+        data: { ngoPosts: posts },
         message: "Data found",
       };
       return response;
@@ -64,7 +64,7 @@ const postDetails = async (postId) => {
   if (rows.length > 0) {
     response = {
       msg: "Data Found",
-      data: rows,
+      data: { post_details: rows },
       success: true,
     };
   } else {

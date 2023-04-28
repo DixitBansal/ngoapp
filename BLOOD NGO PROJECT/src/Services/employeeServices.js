@@ -16,7 +16,7 @@ const viewallEmployee = async (params) => {
     if (data.length > 0) {
       response = {
         success: true,
-        data: data,
+        data: { employeeList: data },
         message: "Data found",
       };
       return response;
@@ -45,7 +45,7 @@ const getEmployeeDetails = async (id) => {
     if (data.length > 0) {
       response = {
         success: true,
-        data: data,
+        data: { employeeDetails: data },
         message: "Data found",
       };
       return response;
@@ -165,7 +165,7 @@ const editEmployee = async (data) => {
       response = {
         success: true,
         message: "user updated successfully.",
-        data: updatedData.data,
+        data: { EmployeeUpdatedData: updatedData.data },
       };
     }
   } else {

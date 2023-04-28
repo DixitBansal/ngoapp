@@ -43,7 +43,7 @@ const updateProfile = async (userData) => {
       response = {
         success: true,
         message: "user updated successfully.",
-        data: updatedData.data,
+        data: { userUpdatedData: updatedData.data },
       };
     }
   } else {
@@ -91,7 +91,7 @@ const getUserDetails = async (id, phone) => {
   if (userdata.rows.length > 0) {
     response = {
       success: true,
-      data: userdata.rows[0],
+      data: { user_details: userdata.rows[0] },
       message: "Data found",
     };
   } else {

@@ -61,7 +61,7 @@ const employeePosts = async (data) => {
     if (rows.length > 0) {
       response = {
         success: true,
-        data: rows,
+        data: { employee_posts: rows },
         message: "Data found",
       };
       return response;

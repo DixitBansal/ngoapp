@@ -14,7 +14,7 @@ const viewallBoodBank = async (data) => {
   if (rows && rows.length > 0) {
     response = {
       success: true,
-      data: rows,
+      data: { bloodSource: rows },
       message: "Data found",
     };
   } else {

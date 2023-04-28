@@ -26,5 +26,5 @@ Routes.use("/admin/employee", employeeRoutes);
 Routes.use("/admin", statesRoutes);
 Routes.use("/employee/ngo-activity-post", ngoPostsRoutes);
 Routes.use("/admin/ngo-post", postVerificationRoutes);
-
+Routes.use("/admin/blood-donation-camp", bloodCampRoutes);
 module.exports = { Routes };

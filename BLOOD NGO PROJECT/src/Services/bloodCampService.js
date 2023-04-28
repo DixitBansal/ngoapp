@@ -15,7 +15,7 @@ const viewallBoodCamp = async (params) => {
     if (data.length > 0) {
       response = {
         success: true,
-        data: data,
+        data: { bloodCamp: data },
         message: "Data found",
       };
       return response;

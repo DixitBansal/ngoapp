@@ -36,7 +36,7 @@ const bloodAvailData = async (data) => {
   if (rows.length > 0) {
     response = {
       success: true,
-      data: rows,
+      data: { blood_avail_data: rows },
       message: "Data found",
     };
   } else {
@@ -64,7 +64,7 @@ const bloodCampData = async (data) => {
   if (rows.length > 0) {
     response = {
       success: true,
-      data: rows,
+      data: { campData: rows },
       message: "Data found",
     };
   } else {

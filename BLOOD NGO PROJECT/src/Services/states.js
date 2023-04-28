@@ -8,7 +8,7 @@ const getstates = async () => {
     const data = await readFileAsync("src/utils/states.json", "utf8");
     const jsonData = JSON.parse(data);
     response = {
-      data: jsonData,
+      data: { states: jsonData },
       success: true,
     };
   } catch (err) {
@@ -27,7 +27,7 @@ const getdistrict = async (state) => {
     const data = await readFileAsync("src/utils/districts.json", "utf8");
     const jsonData = JSON.parse(data);
     response = {
-      data: jsonData[state],
+      data: { districts: jsonData[state] },
       success: true,
     };
   } catch (err) {
