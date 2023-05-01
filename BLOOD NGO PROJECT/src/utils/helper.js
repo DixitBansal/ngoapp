@@ -1,7 +1,4 @@
 const AWS = require("aws-sdk");
-AWS.config.update({
-  region: "ap-south-1",
-});
 
 /** gettingPreSignedUrl
  *
@@ -10,6 +7,9 @@ AWS.config.update({
  */
 const gettingPreSignedUrl = async (filePath, fileFormat) =>
   new Promise((resolve, reject) => {
+    AWS.config.update({
+      region: "ap-south-1",
+    });
     const s3 = new AWS.S3({
       params: { Bucket: process.env.AWS_BUCKET_NAME },
       signatureVersion: "v4",

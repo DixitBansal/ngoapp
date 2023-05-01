@@ -115,13 +115,13 @@ const getPresignedURL = async (data) => {
       message: "invalid arguments",
     };
   }
-  const filePath = `/${type}/${userId}${new Date().getTime()}.${fileFormat}`;
+  const filePath = `images/${type}/${userId}${new Date().getTime()}.${fileFormat}`;
   const preSignedURL = await gettingPreSignedUrl(filePath, fileFormat);
 
   if (preSignedURL) {
     return (this.response = {
       success: true,
-      message: "image_uploaded_successfully",
+      message: "",
       data: preSignedURL,
     });
   } else {
